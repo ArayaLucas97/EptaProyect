@@ -1,0 +1,12 @@
+package com.mycompany.eptaproyect;
+
+import IGU.Deposito.MainMenu;
+
+public class EptaProyect {
+
+    public static void main(String[] args) {
+        MainMenu run = new MainMenu();
+        run.setLocationRelativeTo(null);
+        run.setVisible(true);
+    }
+}
