@@ -9,9 +9,7 @@ public class Inventario extends javax.swing.JPanel {
 
     public Inventario() {
         initComponents();
-        
-        
-        
+   
     }
 
     public void cargarTabla() {

@@ -54,5 +54,10 @@ public class Producto {
     public void setid(int id){
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Producto{" + "Codigo=" + Codigo + ", Nombre=" + Nombre + ", Descripcion=" + Descripcion + ", Cantidad=" + Cantidad + ", id=" + id + '}';
+    }
     
 }

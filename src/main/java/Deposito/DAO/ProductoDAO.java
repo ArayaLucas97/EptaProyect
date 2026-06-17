@@ -78,4 +78,29 @@ public class ProductoDAO {
         return lista;
     }
 
+    public Producto buscarPorCodigo(String codigo) {
+        String sql = "SELECT * FROM inventario WHERE codigo = ?";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, codigo);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return new Producto(
+                        rs.getString("codigo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getInt("cantidad"),
+                        rs.getInt("id")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }
