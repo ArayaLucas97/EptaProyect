@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class ProductoDAO {
     public List<Producto> buscar(String filtro) {
         List<Producto> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM inventario WHERE codigo LIKE ? OR nombre LIKE ?";
+        String sql = "SELECT * FROM inventario WHERE codigo LIKE ? OR nombre LIKE ? ";
 
         try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
 
@@ -103,4 +104,33 @@ public class ProductoDAO {
         return null;
     }
 
+    public int guardarPaquete(String codigo, String nombre) throws SQLException {
+        String sql = "INSERT INTO paquetes (codigo, nombre) VALUES (?, ?)";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            st.setString(1, codigo);
+            st.setString(2, nombre);
+            st.executeUpdate();
+
+            ResultSet rs = st.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1); // ID del paquete
+            }
+        }
+        return -1;
+    }
+
+    
+    public void guardarMaterialPaquete(int idPaquete, String codigoProducto, int cantidadUsada) throws SQLException {
+        String sql = "INSERT INTO paquetes_detalle (id_paquete, codigo_producto, cantidad_usada) VALUES (?,?,?)";
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setInt(1, idPaquete);
+            st.setString(2, codigoProducto);
+            st.setInt(3, cantidadUsada);
+            st.executeUpdate();
+        }
+    }
+    
 }

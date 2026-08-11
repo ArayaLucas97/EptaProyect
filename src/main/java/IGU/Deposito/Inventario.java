@@ -3,20 +3,31 @@ package IGU.Deposito;
 import Deposito.DAO.Producto;
 import Deposito.DAO.ProductoDAO;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 public class Inventario extends javax.swing.JPanel {
 
     public Inventario() {
         initComponents();
-   
+       JTableInventario.getColumnModel().getColumn(0).setPreferredWidth(35);
+       JTableInventario.getColumnModel().getColumn(0).setResizable(false);
+       JTableInventario.getColumnModel().getColumn(1).setPreferredWidth(200);
+       JTableInventario.getColumnModel().getColumn(1).setResizable(false);
+       JTableInventario.getColumnModel().getColumn(2).setPreferredWidth(200);
+       JTableInventario.getColumnModel().getColumn(2).setResizable(false);
+       JTableInventario.getColumnModel().getColumn(3).setPreferredWidth(25);
+       JTableInventario.getColumnModel().getColumn(3).setResizable(false);
+       JTableInventario.getColumnModel().getColumn(4).setPreferredWidth(10);
+       JTableInventario.getColumnModel().getColumn(4).setResizable(false);
+       
     }
 
     public void cargarTabla() {
         ProductoDAO dao = new ProductoDAO();
         List<Producto> lista = dao.listar();
 
-        DefaultTableModel modelo = (DefaultTableModel) jTableInventario.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTableInventario.getModel();
         modelo.setRowCount(0); // limpia la tabla
 
         for (Producto p : lista) {
@@ -34,7 +45,7 @@ public class Inventario extends javax.swing.JPanel {
         ProductoDAO dao = new ProductoDAO();
         List<Producto> lista = dao.buscar(filtro);
 
-        DefaultTableModel modelo = (DefaultTableModel) jTableInventario.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTableInventario.getModel();
         modelo.setRowCount(0);
 
         for (Producto p : lista) {
@@ -54,12 +65,17 @@ public class Inventario extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableInventario = new javax.swing.JTable();
+        JTableInventario = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jTextBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
+        btnItems = new javax.swing.JButton();
+        btnPaquetes = new javax.swing.JButton();
+        btnCancelarBusqueda = new javax.swing.JButton();
 
-        jTableInventario.setModel(new javax.swing.table.DefaultTableModel(
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+
+        JTableInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -67,7 +83,7 @@ public class Inventario extends javax.swing.JPanel {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Codigo", "Nombre", "Descripcion", "Cantidad", "ID"
+                "Codigo", "Nombre", "Comentarios", "Cantidad", "ID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -78,7 +94,7 @@ public class Inventario extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTableInventario);
+        jScrollPane1.setViewportView(JTableInventario);
 
         jLabel1.setText("Ingresar Dato:");
 
@@ -88,10 +104,21 @@ public class Inventario extends javax.swing.JPanel {
             }
         });
 
-        btnBuscar.setText("jButton1");
+        btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnItems.setText("Items");
+
+        btnPaquetes.setText("Paquetes");
+
+        btnCancelarBusqueda.setText("Cancelar");
+        btnCancelarBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarBusquedaActionPerformed(evt);
             }
         });
 
@@ -102,23 +129,37 @@ public class Inventario extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(71, 71, 71)
-                .addComponent(jTextBuscar)
-                .addGap(28, 28, 28)
-                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextBuscar)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnBuscar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelarBusqueda)
+                        .addGap(14, 14, 14))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnItems)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPaquetes)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnItems)
+                    .addComponent(btnPaquetes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
-                .addContainerGap())
+                    .addComponent(btnBuscar)
+                    .addComponent(btnCancelarBusqueda))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -133,21 +174,29 @@ public class Inventario extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextBuscarActionPerformed
-
-    }//GEN-LAST:event_jTextBuscarActionPerformed
+    private void btnCancelarBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarBusquedaActionPerformed
+        jTextBuscar.setText("");
+        cargarTablaFiltrada(jTextBuscar.getText());
+    }//GEN-LAST:event_btnCancelarBusquedaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         cargarTablaFiltrada(jTextBuscar.getText());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void jTextBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextBuscarActionPerformed
+
+    }//GEN-LAST:event_jTextBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTable JTableInventario;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCancelarBusqueda;
+    private javax.swing.JButton btnItems;
+    private javax.swing.JButton btnPaquetes;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTable jTableInventario;
     private javax.swing.JTextField jTextBuscar;
     // End of variables declaration//GEN-END:variables
 }
