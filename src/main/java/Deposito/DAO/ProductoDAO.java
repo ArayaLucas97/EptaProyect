@@ -11,13 +11,43 @@ import java.util.List;
 
 public class ProductoDAO {
 
-    public List<Producto> listar() {
+    public Producto buscarPorCodigo(String codigo) {
+
+        String sql
+                = "SELECT * FROM inventario WHERE UPPER(codigo)=UPPER(?)";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, codigo);
+
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+
+                return new Producto(
+                        rs.getString("codigo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getInt("cantidad"),
+                        rs.getInt("id")
+                );
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+        }
+
+        return null;
+    }
+
+    public List<Producto> listarItems() {
         List<Producto> lista = new ArrayList<>();
 
         String sql = "SELECT * FROM inventario";
 
         try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
-
             while (rs.next()) {
                 Producto p = new Producto(
                         rs.getString("codigo"),
@@ -28,11 +58,9 @@ public class ProductoDAO {
                 );
                 lista.add(p);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return lista;
     }
 
@@ -79,31 +107,6 @@ public class ProductoDAO {
         return lista;
     }
 
-    public Producto buscarPorCodigo(String codigo) {
-        String sql = "SELECT * FROM inventario WHERE codigo = ?";
-
-        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
-
-            st.setString(1, codigo);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                return new Producto(
-                        rs.getString("codigo"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getInt("cantidad"),
-                        rs.getInt("id")
-                );
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public int guardarPaquete(String codigo, String nombre) throws SQLException {
         String sql = "INSERT INTO paquetes (codigo, nombre) VALUES (?, ?)";
 
@@ -121,16 +124,67 @@ public class ProductoDAO {
         return -1;
     }
 
-    
-    public void guardarMaterialPaquete(int idPaquete, String codigoProducto, int cantidadUsada) throws SQLException {
-        String sql = "INSERT INTO paquetes_detalle (id_paquete, codigo_producto, cantidad_usada) VALUES (?,?,?)";
+    public void guardarMaterialPaquete(int idPaquete, String codigoProducto, String nombreProducto, int cantidadUsada) throws SQLException {
+        String sql = "INSERT INTO paquetes_detalle (id_paquete, codigo_producto, nombre_producto,cantidad_usada) VALUES (?,?,?,?)";
         try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setInt(1, idPaquete);
             st.setString(2, codigoProducto);
-            st.setInt(3, cantidadUsada);
+            st.setString(3, nombreProducto);
+            st.setInt(4, cantidadUsada);
             st.executeUpdate();
         }
     }
-    
+
+    public void actualizarProducto(Producto p) throws SQLException {
+        String sql = "UPDATE inventario SET nombre = ?, descripcion = ?, cantidad = ? WHERE id = ?";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setString(1, p.getNombre());
+            st.setString(2, p.getDescripcion());
+            st.setInt(3, p.getCantidad());
+            st.setInt(4, p.getId());
+
+            st.executeUpdate();
+        }
+    }
+
+    public void eliminarProducto(int id) throws SQLException {
+        String sql = "DELETE FROM inventario WHERE id=?";
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setInt(1, id);
+            st.executeUpdate();
+        }
+    }
+
+    public Producto buscarPorId(int id) {
+
+        String sql = "SELECT * FROM inventario WHERE id = ?";
+
+        try (Connection con = ConexionDB.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+
+            st.setInt(1, id);
+
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+
+                return new Producto(
+                        rs.getString("codigo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getInt("cantidad"),
+                        rs.getInt("id")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

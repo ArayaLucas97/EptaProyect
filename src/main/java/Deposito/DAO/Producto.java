@@ -2,8 +2,8 @@ package Deposito.DAO;
 
 public class Producto {
     
-    String Codigo, Nombre,Descripcion;
-    int Cantidad, id;
+   private String Codigo, Nombre,Descripcion;
+   private int Cantidad, id;
     public Producto(){
         
     }

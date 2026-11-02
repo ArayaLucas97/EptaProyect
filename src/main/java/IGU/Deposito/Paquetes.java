@@ -12,13 +12,55 @@ public class Paquetes extends javax.swing.JPanel {
     public Paquetes() {
         initComponents();
         cargarInventario();
+
+        //tabla de informacion inventario
+        JTableInventario.getColumnModel().getColumn(0).setPreferredWidth(35);
+        JTableInventario.getColumnModel().getColumn(0).setResizable(false);
+        JTableInventario.getColumnModel().getColumn(1).setPreferredWidth(200);
+        JTableInventario.getColumnModel().getColumn(1).setResizable(false);
+        JTableInventario.getColumnModel().getColumn(2).setPreferredWidth(200);
+        JTableInventario.getColumnModel().getColumn(2).setResizable(false);
+        JTableInventario.getColumnModel().getColumn(3).setPreferredWidth(25);
+        JTableInventario.getColumnModel().getColumn(3).setResizable(false);
+        JTableInventario.getColumnModel().getColumn(4).setPreferredWidth(10);
+        JTableInventario.getColumnModel().getColumn(4).setResizable(false);
+        //Jtabla de informacion paquete
+        JTablePaquete.getColumnModel().getColumn(0).setPreferredWidth(35);
+        JTablePaquete.getColumnModel().getColumn(0).setResizable(false);
+        JTablePaquete.getColumnModel().getColumn(1).setPreferredWidth(200);
+        JTablePaquete.getColumnModel().getColumn(1).setResizable(false);
+        JTablePaquete.getColumnModel().getColumn(2).setPreferredWidth(200);
+        JTablePaquete.getColumnModel().getColumn(2).setResizable(false);
+        JTablePaquete.getColumnModel().getColumn(3).setPreferredWidth(25);
+        JTablePaquete.getColumnModel().getColumn(3).setResizable(false);
+        JTablePaquete.getColumnModel().getColumn(4).setPreferredWidth(10);
+        JTablePaquete.getColumnModel().getColumn(4).setResizable(false);
+
     }
 
     public void cargarInventario() {
         ProductoDAO dao = new ProductoDAO();
-        List<Producto> lista = dao.listar();
+        List<Producto> lista = dao.listarItems();
 
-        DefaultTableModel modelo = (DefaultTableModel) tablaInventario.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTableInventario.getModel();
+        modelo.setRowCount(0);
+
+        for (Producto p : lista) {
+            modelo.addRow(new Object[]{
+                p.getCodigo(),
+                p.getNombre(),
+                p.getDescripcion(),
+                p.getCantidad(),
+                p.getId()
+            });
+        }
+    }
+
+    public void CargarTablaFiltrada(String filtro) {
+        ProductoDAO dao = new ProductoDAO();
+        List<Producto> lista = dao.buscar(filtro);
+
+        DefaultTableModel modelo = (DefaultTableModel) JTableInventario.getModel();
         modelo.setRowCount(0);
 
         for (Producto p : lista) {
@@ -40,9 +82,9 @@ public class Paquetes extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtNombrePaquete = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTablePaquete = new javax.swing.JTable();
+        JTablePaquete = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tablaInventario = new javax.swing.JTable();
+        JTableInventario = new javax.swing.JTable();
         btnGuardarPaquete = new javax.swing.JButton();
         btnBorrarItem = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -52,16 +94,18 @@ public class Paquetes extends javax.swing.JPanel {
         btnAgregarProducto = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtCodigoNombre = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JToggleButton();
         jLabel5 = new javax.swing.JLabel();
         txtCodigoPaquete = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel2.setText("Nombre del Paquete:");
 
-        jTablePaquete.setModel(new javax.swing.table.DefaultTableModel(
+        JTablePaquete.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -77,9 +121,9 @@ public class Paquetes extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTablePaquete);
+        jScrollPane1.setViewportView(JTablePaquete);
 
-        tablaInventario.setModel(new javax.swing.table.DefaultTableModel(
+        JTableInventario.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -98,7 +142,7 @@ public class Paquetes extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tablaInventario);
+        jScrollPane3.setViewportView(JTableInventario);
 
         btnGuardarPaquete.setText("Guardar Paquete");
         btnGuardarPaquete.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +162,7 @@ public class Paquetes extends javax.swing.JPanel {
 
         jLabel3.setText("Cantidad:");
 
-        btnAgregarProducto.setText("Agregar al Paquete");
+        btnAgregarProducto.setText("Agregar Item");
         btnAgregarProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarProductoActionPerformed(evt);
@@ -132,44 +176,32 @@ public class Paquetes extends javax.swing.JPanel {
             }
         });
 
-        jLabel4.setText("Codigo/Nombre:");
+        jLabel4.setText("Buscar Codigo/Nombre:");
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
-        jLabel5.setText("Codigo del Paquete");
+        jLabel5.setText("Cod del Paquete:");
+
+        jLabel6.setText("CREAR PAQUETE");
+
+        jLabel7.setText("AGREGAR ITEMS AL PAQUETE");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3)
-                    .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnBorrarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLimpiar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGuardarPaquete))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnBuscar))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNombrePaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtCodigoPaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,48 +209,79 @@ public class Paquetes extends javax.swing.JPanel {
                                 .addComponent(jLabel3)
                                 .addGap(18, 18, 18)
                                 .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(35, 35, 35)
-                                .addComponent(btnAgregarProducto)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAgregarProducto)
+                                .addGap(0, 221, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnBorrarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLimpiar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGuardarPaquete)
+                        .addGap(14, 14, 14))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCodigoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBuscar)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNombrePaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtCodigoPaquete, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(4, 4, 4)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodigoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtNombrePaquete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5)
                         .addComponent(txtCodigoPaquete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAgregarProducto))))
+                .addGap(25, 25, 25)
+                .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarProducto)
+                    .addComponent(txtCodigoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBorrarItem)
                     .addComponent(btnLimpiar)
                     .addComponent(btnGuardarPaquete))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -234,7 +297,7 @@ public class Paquetes extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        DefaultTableModel modelo = (DefaultTableModel) jTablePaquete.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTablePaquete.getModel();
         modelo.setRowCount(0);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -271,15 +334,16 @@ public class Paquetes extends javax.swing.JPanel {
             return;
         }
 
+        /*
         // 4) Validar stock suficiente
         if (cantidadUsada > p.getCantidad()) {
             JOptionPane.showMessageDialog(this,
                     "Stock insuficiente.\nDisponible: " + p.getCantidad() + "\nSolicitado: " + cantidadUsada);
             return;
         }
-
+         */
         // 5) Validar que NO esté repetido en la tabla del paquete
-        DefaultTableModel modelo = (DefaultTableModel) jTablePaquete.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTablePaquete.getModel();
 
         for (int i = 0; i < modelo.getRowCount(); i++) {
             String codigoExistente = modelo.getValueAt(i, 0).toString();
@@ -305,19 +369,19 @@ public class Paquetes extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregarProductoActionPerformed
 
     private void btnBorrarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarItemActionPerformed
-        int fila = jTablePaquete.getSelectedRow();
+        int fila = JTablePaquete.getSelectedRow();
 
         if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un material para eliminar");
             return;
         }
 
-        DefaultTableModel modelo = (DefaultTableModel) jTablePaquete.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) JTablePaquete.getModel();
         modelo.removeRow(fila);
     }//GEN-LAST:event_btnBorrarItemActionPerformed
 
     private void btnGuardarPaqueteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarPaqueteActionPerformed
-           
+
         String nombrePaquete = txtNombrePaquete.getText().trim(); // tu campo de nombre
         String codigoPaquete = txtCodigoPaquete.getText().trim(); // tu campo de código
 
@@ -338,14 +402,16 @@ public class Paquetes extends javax.swing.JPanel {
             }
 
             // 2) Recorrer la tabla jTablePaquete
-            DefaultTableModel modelo = (DefaultTableModel) jTablePaquete.getModel();
+            DefaultTableModel modelo = (DefaultTableModel) JTablePaquete.getModel();
 
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 String codigoProducto = modelo.getValueAt(i, 0).toString();
+                String nombreProducto = modelo.getValueAt(i,1).toString();
                 int cantidadUsada = Integer.parseInt(modelo.getValueAt(i, 3).toString());
+             
 
                 // 3) Guardar cada material del paquete
-                dao.guardarMaterialPaquete(idPaquete, codigoProducto, cantidadUsada);
+                dao.guardarMaterialPaquete(idPaquete, codigoProducto, nombreProducto,cantidadUsada);
             }
 
             JOptionPane.showMessageDialog(this, "Paquete guardado correctamente");
@@ -358,11 +424,17 @@ public class Paquetes extends javax.swing.JPanel {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-        
+
     }//GEN-LAST:event_btnGuardarPaqueteActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        CargarTablaFiltrada(txtCodigoNombre.getText());
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JTable JTableInventario;
+    public javax.swing.JTable JTablePaquete;
     private javax.swing.JButton btnAgregarProducto;
     private javax.swing.JButton btnBorrarItem;
     private javax.swing.JToggleButton btnBuscar;
@@ -373,13 +445,13 @@ public class Paquetes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    public javax.swing.JTable jTablePaquete;
-    private javax.swing.JTextField jTextField2;
-    public javax.swing.JTable tablaInventario;
     private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtCodigoNombre;
     private javax.swing.JTextField txtCodigoPaquete;
     private javax.swing.JTextField txtCodigoProducto;
     private javax.swing.JTextField txtNombrePaquete;
