@@ -3,7 +3,7 @@ package IGU.Deposito;
 import Deposito.DAO.Producto;
 import Deposito.DAO.ProductoDAO;
 import javax.swing.JOptionPane;
-
+//Lucas Araya & Juan Lencina
 public class IngresoNuevo extends javax.swing.JPanel {
 
     public IngresoNuevo() {

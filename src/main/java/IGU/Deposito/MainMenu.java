@@ -3,7 +3,7 @@ package IGU.Deposito;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import javax.swing.JPanel;
-
+//Lucas Araya & Juan Lencina
 public class MainMenu extends javax.swing.JFrame {
 
     public MainMenu() {
@@ -74,7 +74,12 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
-        btnRetiro.setText("Retiro");
+        btnRetiro.setText("Ingreso/Retiro");
+        btnRetiro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetiroActionPerformed(evt);
+            }
+        });
 
         btnPaquetes.setText("Crear Paquetes");
         btnPaquetes.addActionListener(new java.awt.event.ActionListener() {
@@ -94,8 +99,8 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(btnNuevoProducto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnPaquetes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 374, Short.MAX_VALUE)
-                .addComponent(btnRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 326, Short.MAX_VALUE)
+                .addComponent(btnRetiro, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -140,6 +145,10 @@ public class MainMenu extends javax.swing.JFrame {
     private void btnModificarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarProductoActionPerformed
         mostrarPanel(new ModificarProducto());
     }//GEN-LAST:event_btnModificarProductoActionPerformed
+
+    private void btnRetiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetiroActionPerformed
+        mostrarPanel(new IngresoRetiroMateriales());
+    }//GEN-LAST:event_btnRetiroActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

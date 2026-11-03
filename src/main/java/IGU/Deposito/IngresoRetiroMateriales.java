@@ -1,8 +1,8 @@
 package IGU.Deposito;
 
-public class retiroProducto extends javax.swing.JPanel {
-
-    public retiroProducto() {
+public class IngresoRetiroMateriales extends javax.swing.JPanel {
+//Lucas Araya & Juan Lencina
+    public IngresoRetiroMateriales() {
         initComponents();
     }
 

@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-
+//Lucas Araya & Juan Lencina
 public class ModificarProducto extends javax.swing.JPanel {
 
     private boolean modoPaquete = false;
@@ -329,7 +329,7 @@ public class ModificarProducto extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Comentario", "Cantidad", "ID"
+                "Codigo", "Nombre", "Comentario", "Cantidad"
             }
         ));
         JTableInventario.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

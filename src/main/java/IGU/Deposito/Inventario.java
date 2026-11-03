@@ -7,7 +7,7 @@ import Deposito.DAO.ProductoDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+//Lucas Araya & Juan Lencina
 public class Inventario extends javax.swing.JPanel {
 
     public Inventario() {
